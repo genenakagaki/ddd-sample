@@ -1,0 +1,17 @@
+@startuml 
+title Context Map
+
+storage userContext as " " {
+    label user as "User" <<Context>>
+    port p1
+}
+
+storage shoppingListContext as " " {
+    label shoppingList as "Shopping List" <<Context>>
+    port p2
+} 
+
+p1 -- p2
+
+
+@enduml

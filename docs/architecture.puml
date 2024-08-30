@@ -1,0 +1,58 @@
+@startuml 
+title Application Architecture
+
+cloud internet 
+
+node webApp as "web-app" <<module>> {
+
+    node web <<module>> {
+        collections Controller
+    }
+
+    internet --> Controller: HTTP request
+
+    frame Command {
+        node application <<module>> {
+            interface IApplicationService
+            collections ApplicationServiceImpl
+
+            Controller --( IApplicationService: uses
+            
+            IApplicationService -- ApplicationServiceImpl
+
+            interface IRepository
+            ApplicationServiceImpl --( IRepository: uses
+        }
+
+        node domain <<module>> {
+            collections Entity
+
+            Entity <- ApplicationServiceImpl: uses
+        }
+
+        node repository <<module>> {
+            collections RepositoryImpl
+            IRepository -- RepositoryImpl
+        }
+    }
+
+    frame Query {
+        node query <<module>> {
+            interface IQueryService
+            collections QueryServiceImpl
+
+            Controller --( IQueryService: uses
+
+            IQueryService -- QueryServiceImpl
+        }
+    }
+}
+
+Entity -[hidden]right- ApplicationServiceImpl
+
+
+database Persistence
+RepositoryImpl --> Persistence: Query
+QueryServiceImpl --> Persistence: Query
+
+@enduml

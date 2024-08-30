@@ -1,0 +1,60 @@
+@startuml 
+title UseCase Diagram
+
+left to right direction
+
+actor guest
+
+actor user <<user>>
+actor groupOwner as "group owner" <<user>>
+actor groupMember as "group member" <<user>>
+
+frame System as "Check List System" {
+    frame userContext as "User" {
+        usecase createUser as "create"
+        usecase deleteUser as "delete"
+    }
+
+    frame Group {
+        usecase createGroup as "create"
+        usecase deleteGroup as "delete"
+        usecase addUser as "add user"
+        usecase removeUser as "remove user"
+    }
+
+    frame CheckList {
+        usecase createList as "create list"
+        usecase deleteList as "delete list"
+        usecase addListItem as "add list item"
+        usecase removeListItem as "remove list item"
+        usecase mark as "mark as done"
+        usecase unmark as "mark as not done"
+
+        createList -[hidden]left- deleteList
+        deleteList -[hidden]left- addListItem
+        addListItem -[hidden]left- removeListItem
+        removeListItem -[hidden]left- mark
+        mark -[hidden]left- unmark
+    }
+
+    deleteUser -[hidden]left- createGroup
+    removeUser -[hidden]down- createList
+}
+
+
+
+guest --> createUser
+user --> deleteUser
+user --> createGroup
+groupOwner --> deleteGroup
+groupOwner --> addUser
+groupOwner --> removeUser
+createList <-- groupMember
+deleteList <-- groupMember
+addListItem <-- groupMember
+removeListItem <-- groupMember
+mark <-- groupMember
+unmark <-- groupMember
+
+
+@enduml
