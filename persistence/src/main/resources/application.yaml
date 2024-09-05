@@ -2,7 +2,9 @@ spring:
   application:
     name: checklist
 
-#  datasource:
-#    url: jdbc:mysql://localhost/test
-#    username: dbuser
-#    password: dbpass
+  jooq:
+    sql-dialect:
+  datasource:
+    url: jdbc:mysql://localhost:3306/checklist
+    username: app_user
+    password: 7iMXNMMx6fQeiL

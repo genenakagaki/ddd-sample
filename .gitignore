@@ -1,3 +1,8 @@
+### Checklist custom
+tools/docker/mysql/db-data
+
+
+##### Default by Spring Initializr and IntelliJ
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
@@ -37,3 +42,5 @@ out/
 
 ### Mac OS ###
 .DS_Store
+
+

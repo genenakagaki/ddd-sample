@@ -1,0 +1,12 @@
+services:
+  db:
+    image: mysql:8.4.2
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    volumes:
+      - ./mysql/db-data:/var/lib/mysql
+      - type: bind
+        source: mysql/docker-entrypoint-initdb.d
+        target: /docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
