@@ -1,10 +1,10 @@
 spring:
   application:
     name: checklist
-
   jooq:
-    sql-dialect:
+    sql-dialect: mysql
   datasource:
     url: jdbc:mysql://localhost:3306/checklist
     username: app_user
     password: 7iMXNMMx6fQeiL
+    drive-class-name: com.mysql.cj.jdbc.Driver
