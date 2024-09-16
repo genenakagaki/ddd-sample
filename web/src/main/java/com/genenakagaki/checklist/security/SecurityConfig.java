@@ -21,16 +21,18 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         http
                 .authorizeExchange((authorize) -> authorize
-                        .pathMatchers("/login",
-                                "/logout",
+                        .pathMatchers("/v3/api-docs",
+                                "/api/login",
+                                "/api/logout",
                                 "/api/user/register").permitAll()
                         .anyExchange().authenticated()
                 )
                 .formLogin(formLoginSpec -> formLoginSpec
                         .authenticationSuccessHandler(new CustomServerAuthenticationSuccessHandler())
                         .authenticationFailureHandler(new CustomServerAuthenticationFailureHandler())
-                        .loginPage("/login")
+                        .loginPage("/api/login")
                 )
+                .logout(logoutSpec -> logoutSpec.logoutUrl("/api/logout"))
                 .csrf(csrfSpec -> csrfSpec.disable())
                 .httpBasic(httpBasicSpec -> httpBasicSpec.disable())
                 .cors(corsSpec -> corsSpec.configurationSource(corsConfigurationSource()))
@@ -51,6 +53,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
