@@ -2,7 +2,7 @@ package com.genenakagaki.checklist.controller.error;
 
 import lombok.Getter;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Getter
@@ -12,13 +12,18 @@ public class BadRequestException extends RuntimeException {
 
     public BadRequestException(String errorMessage) {
         super();
-        this.errorData = new ErrorData(Optional.of(errorMessage), List.of());
+        this.errorData = new ErrorData(Optional.of(errorMessage), Map.of());
+    }
+
+    public BadRequestException(Map<String, String> fieldNameByErrorMessage) {
+        super();
+        this.errorData = new ErrorData(Optional.empty(), fieldNameByErrorMessage);
     }
 
     public BadRequestException(String fieldName, String errorMessage) {
         super();
-        this.errorData = new ErrorData(Optional.empty(), List.of(
-                new ErrorData.FieldError(fieldName, errorMessage)
+        this.errorData = new ErrorData(Optional.empty(), Map.of(
+                fieldName, errorMessage
         ));
     }
 }

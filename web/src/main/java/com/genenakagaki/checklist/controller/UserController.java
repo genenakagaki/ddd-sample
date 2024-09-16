@@ -12,7 +12,6 @@ import com.genenakagaki.checklist.domain.user.UsernamePatternException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
@@ -39,7 +42,8 @@ public class UserController {
     public Mono<Void> register(@RequestBody @Valid RegisterUserBody body) {
         return Mono.<Void>defer(() -> {
             try {
-                userService.register(body.username(), body.password(), (password) -> passwordEncoder.encode(password));
+                RegisterUserBody.Validated validated = body.validate();
+                userService.register(validated.username(), validated.password(), (pass) -> passwordEncoder.encode(pass));
                 return Mono.empty();
             } catch (DuplicateUsernameException e) {
                 throw new BadRequestException("username", "Username is already taken.");
@@ -47,38 +51,47 @@ public class UserController {
         }).subscribeOn(Schedulers.boundedElastic());
     }
 
-    @Value
-    public static class RegisterUserBody {
-        @NotBlank(message = "Enter your username")
-        String username;
-        @NotBlank(message = "Enter your password")
-        String password;
+    public record RegisterUserBody(
+            @NotBlank(message = "Enter your username")
+            String username,
+            @NotBlank(message = "Enter your password")
+            String password
+    ) {
+        public Validated validate() {
+            Map<String, String> fieldNameByErrorMessage = new HashMap<>();
 
-        public Username username() {
+            Optional<Username> validatedUsername = Optional.empty();
+            Optional<Password> validatedPassword = Optional.empty();
+
             try {
-                return Username.create(username);
+                validatedUsername = Optional.of(Username.create(username));
             } catch (UsernameLengthException e) {
-                throw new BadRequestException("username",
+                fieldNameByErrorMessage.put("username",
                         String.format("Username must be between %s and %s characters long.",
                                 Username.MIN_LENGTH,
                                 Username.MAX_LENGTH));
             } catch (UsernamePatternException e) {
-                throw new BadRequestException("username", "Username can only contain letters, numbers, and hyphens.");
+                fieldNameByErrorMessage.put("username", "Username can only contain letters, numbers, and hyphens.");
             }
-        }
 
-        public Password password() {
             try {
-                return Password.create(password);
+                validatedPassword = Optional.of(Password.create(password));
             } catch (PasswordLengthException e) {
-                throw new BadRequestException("password",
+                fieldNameByErrorMessage.put("password",
                         String.format("Password must be between %s and %s characters long.",
                                 Password.MIN_LENGTH,
                                 Password.MAX_LENGTH));
             } catch (PasswordPatternException e) {
-                throw new BadRequestException("password",
+                fieldNameByErrorMessage.put("password",
                         "Password can only contain letters, numbers, and !@#$%^&*.");
             }
+
+            Username u = validatedUsername.orElseThrow(() -> new BadRequestException(fieldNameByErrorMessage));
+            Password p = validatedPassword.orElseThrow(() -> new BadRequestException(fieldNameByErrorMessage));
+            return new Validated(u, p);
         }
+
+        public record Validated(Username username, Password password) { }
     }
+
 }

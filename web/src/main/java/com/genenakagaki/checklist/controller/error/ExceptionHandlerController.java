@@ -9,32 +9,32 @@ import org.springframework.web.bind.support.WebExchangeBindException;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ExceptionHandlerController {
 
     @ExceptionHandler(WebExchangeBindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Mono<ErrorData> onBadRequest(WebExchangeBindException e) {
+    public Mono<ErrorData> onWebExchangeBindException(WebExchangeBindException e) {
         return Mono.defer(() -> {
-            List<ErrorData.FieldError> fieldErrors = e.getFieldErrors()
+            Map<String, String> fieldNameByErrorMessage = e.getFieldErrors()
                     .stream()
-                    .map(field -> new ErrorData.FieldError(field.getDefaultMessage(), field.getField()))
-                    .toList();
+                    .collect(Collectors.toMap(field -> field.getField(), field -> field.getDefaultMessage()));
 
-            if (fieldErrors.isEmpty()) {
-                return Mono.just(new ErrorData(Optional.of(DomainValidationException.DEFAULT_MESSAGE), List.of()));
+            if (fieldNameByErrorMessage.isEmpty()) {
+                return Mono.just(new ErrorData(Optional.of(DomainValidationException.DEFAULT_MESSAGE), Map.of()));
             }
 
-            return Mono.just(new ErrorData(Optional.empty(), fieldErrors));
+            return Mono.just(new ErrorData(Optional.empty(), fieldNameByErrorMessage));
         }).subscribeOn(Schedulers.boundedElastic());
     }
 
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Mono<ErrorData> onBadRequest(BadRequestException e) {
+    public Mono<ErrorData> onBadRequestException(BadRequestException e) {
         return Mono.defer(() -> {
             return Mono.just(e.errorData());
         }).subscribeOn(Schedulers.boundedElastic());
