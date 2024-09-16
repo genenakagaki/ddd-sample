@@ -1,4 +1,4 @@
-package com.genenakagaki.checklist.domain;
+package com.genenakagaki.checklist.domain.error;
 
 public class DomainValidationException extends Exception {
 

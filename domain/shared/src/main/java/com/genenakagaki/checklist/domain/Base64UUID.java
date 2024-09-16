@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.Base64;
 import java.util.UUID;
 
-public record Base64UUID(String uuid) {
+public record Base64UUID(String value) {
 
     public static Base64UUID create() {
         UUID uuid = UUID.randomUUID();

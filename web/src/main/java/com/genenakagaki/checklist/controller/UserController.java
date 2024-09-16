@@ -1,14 +1,14 @@
 package com.genenakagaki.checklist.controller;
 
-import com.genenakagaki.checklist.app.UserService;
+import com.genenakagaki.checklist.app.user.UserService;
 import com.genenakagaki.checklist.controller.error.BadRequestException;
-import com.genenakagaki.checklist.domain.user.DuplicateUsernameException;
+import com.genenakagaki.checklist.domain.user.error.DuplicateUsernameException;
 import com.genenakagaki.checklist.domain.user.Password;
-import com.genenakagaki.checklist.domain.user.PasswordLengthException;
-import com.genenakagaki.checklist.domain.user.PasswordPatternException;
+import com.genenakagaki.checklist.domain.user.error.PasswordLengthException;
+import com.genenakagaki.checklist.domain.user.error.PasswordPatternException;
 import com.genenakagaki.checklist.domain.user.Username;
-import com.genenakagaki.checklist.domain.user.UsernameLengthException;
-import com.genenakagaki.checklist.domain.user.UsernamePatternException;
+import com.genenakagaki.checklist.domain.user.error.UsernameLengthException;
+import com.genenakagaki.checklist.domain.user.error.UsernamePatternException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;

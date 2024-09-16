@@ -1,5 +1,8 @@
 package com.genenakagaki.checklist.domain.user;
 
+import com.genenakagaki.checklist.domain.user.error.UsernameLengthException;
+import com.genenakagaki.checklist.domain.user.error.UsernamePatternException;
+
 import java.util.regex.Pattern;
 
 public record Username(String value) {

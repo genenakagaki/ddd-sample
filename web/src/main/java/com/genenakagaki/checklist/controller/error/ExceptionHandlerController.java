@@ -1,6 +1,6 @@
 package com.genenakagaki.checklist.controller.error;
 
-import com.genenakagaki.checklist.domain.DomainValidationException;
+import com.genenakagaki.checklist.domain.error.DomainValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;

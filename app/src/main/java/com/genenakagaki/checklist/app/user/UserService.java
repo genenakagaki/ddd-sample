@@ -1,6 +1,6 @@
-package com.genenakagaki.checklist.app;
+package com.genenakagaki.checklist.app.user;
 
-import com.genenakagaki.checklist.domain.user.DuplicateUsernameException;
+import com.genenakagaki.checklist.domain.user.error.DuplicateUsernameException;
 import com.genenakagaki.checklist.domain.user.Password;
 import com.genenakagaki.checklist.domain.user.Username;
 

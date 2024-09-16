@@ -1,7 +1,7 @@
-package com.genenakagaki.checklist.app;
+package com.genenakagaki.checklist.app.user;
 
 import com.genenakagaki.checklist.domain.UserEntity;
-import com.genenakagaki.checklist.domain.user.DuplicateUsernameException;
+import com.genenakagaki.checklist.domain.user.error.DuplicateUsernameException;
 
 public interface UserRepository {
 

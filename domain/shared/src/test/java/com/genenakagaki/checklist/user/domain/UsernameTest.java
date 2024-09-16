@@ -1,9 +1,9 @@
 package com.genenakagaki.checklist.user.domain;
 
-import com.genenakagaki.checklist.domain.DomainValidationException;
+import com.genenakagaki.checklist.domain.error.DomainValidationException;
 import com.genenakagaki.checklist.domain.user.Username;
-import com.genenakagaki.checklist.domain.user.UsernameLengthException;
-import com.genenakagaki.checklist.domain.user.UsernamePatternException;
+import com.genenakagaki.checklist.domain.user.error.UsernameLengthException;
+import com.genenakagaki.checklist.domain.user.error.UsernamePatternException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

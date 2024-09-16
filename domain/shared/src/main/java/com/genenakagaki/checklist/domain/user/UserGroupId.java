@@ -7,10 +7,10 @@ import lombok.Value;
 
 @EqualsAndHashCode(callSuper = false)
 @Value
-public class UserId extends ValueObject {
-    Base64UUID userId;
+public class UserGroupId extends ValueObject {
+    Base64UUID id;
 
     public String getIdString() {
-        return userId.value();
+        return id.value();
     }
 }
